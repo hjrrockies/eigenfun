@@ -1,4 +1,16 @@
-#Ignore video files
+# DS_Store
+.DS_Store
+
+# video files
 *.mp4
 *.avi
 *.gif
+
+# image files
+*.jpg
+*.JPG
+*.png
+
+# python secondary files
+*__pycache__*
+**/.ipynb_checkpoints
