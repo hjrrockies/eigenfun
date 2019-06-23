@@ -1,20 +1,22 @@
 USAGE = """USAGE
 
-$ python anipix.py [imfile1] [imfile2] [outfile]
+$ python anipix.py [imfile1] [imfile2] [outfile] [--color]
 
 [outfile] must be .mp4
 
-Example:
+[--c] is an optional flag to use color mode (much slower)
+
+Examples:
 
     $ python anipix.py camera2.png lena.png mixing.mp4
+
+    $ python anipix.py im1.jpg im2.jpg mixing2.mp4 --c
 """
 
 
 if __name__ == "__main__":
     from sys import argv
     import pixelanimation as pa
-    from imageio import imread
-    import numpy as np
 
     if len(argv) < 4 or "--help" in argv:
         print(USAGE)
@@ -24,10 +26,8 @@ if __name__ == "__main__":
         print(USAGE)
 
     else:
-        img1 = np.array(imread(argv[1],as_gray=True))/256
-        img2 = np.array(imread(argv[2],as_gray=True))/256
-
-        if img1.shape[0]*img1.shape[1] != img2.shape[0]*img2.shape[1]:
-            raise ValueError("Images must have the name number of pixels")
-
-        pa.animate_pixels(img1,img2,argv[3],verbose=True)
+        if "--c" in argv:
+            print("Using color mode")
+            pa.animate_pixels_color(argv[1],argv[2],argv[3],verbose=True)
+        else:
+            pa.animate_pixels(argv[1],argv[2],argv[3],verbose=True)
