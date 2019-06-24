@@ -125,7 +125,7 @@ def animate_pixels(imfile1,imfile2,outfile,color=False,verbose=False):
             else: points.set_array(colors[i])
         if verbose: bar3.next()
 
-    if verbose: bar3 = IncrementalBar("Rendering\t\t",max=total,suffix='%(percent)d%%')
+    if verbose: bar3 = IncrementalBar("Rendering\t",max=total,suffix='%(percent)d%%')
 
     # Create FuncAnimation with 60-millisecond inteval between frames
     ani = animation.FuncAnimation(fig,update,frames=total,interval=60)
