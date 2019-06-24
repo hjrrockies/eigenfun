@@ -4,7 +4,7 @@ $ python anipix.py [imfile1] [imfile2] [outfile] [--color]
 
 [outfile] must be .mp4
 
-[--c] is an optional flag to use color mode (much slower)
+[--c] is an optional flag to use color mode (slower)
 
 Examples:
 
@@ -28,6 +28,6 @@ if __name__ == "__main__":
     else:
         if "--c" in argv:
             print("Using color mode")
-            pa.animate_pixels_color(argv[1],argv[2],argv[3],verbose=True)
+            pa.animate_pixels(argv[1],argv[2],argv[3],verbose=True,color=True)
         else:
             pa.animate_pixels(argv[1],argv[2],argv[3],verbose=True)
