@@ -10,6 +10,7 @@ def grayscale_to_coords(image):
     """Sorts a grayscale image's pixels by saturation, and returns arrays
     containing the row and column positions corresponding to sorted order,
     as well as the sorted intensities as a flattened array."""
+
     rot_image = np.rot90(image,k=-1)
     rows,cols = np.unravel_index(np.argsort(rot_image,axis=None),shape=rot_image.shape)
     colors = np.sort(rot_image.flatten())
@@ -19,6 +20,7 @@ def color_to_coords(image):
     """Sorts a color image's pixels by hue, and returns arrays containing the
     row and column positions corresponding to sorted order, as well as the
     sorted rgb values as a Nx3 array."""
+
     rot_image = np.rot90(image,k=-1)
     hue = rgb_to_hsv(rot_image)[:,:,0]
     mask = np.argsort(hue,axis=None)
