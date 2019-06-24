@@ -24,7 +24,7 @@ def color_to_coords(image):
     rot_image = np.rot90(image,k=-1)
     hue = rgb_to_hsv(rot_image)[:,:,0]
     mask = np.argsort(hue,axis=None)
-    rows,cols = np.unravel_index(mask,shape=rot_image.shape)
+    rows,cols = np.unravel_index(mask,shape=rot_image.shape[:2])
     colors = rot_image.reshape((rot_image.shape[0]*rot_image.shape[1],3))[mask]
     return rows,cols,colors
 
@@ -59,7 +59,7 @@ def animate_pixels(imfile1,imfile2,outfile,color=False,verbose=False):
         raise ValueError("Images must have the name number of pixels")
 
     # Sort pixels by saturation (if grayscale) or hue (if color)
-    if verbose: bar1 = IncrementalBar("Sorting", max=2,suffix='%(percent)d%%')
+    if verbose: bar1 = IncrementalBar("Sorting\t\t", max=2,suffix='%(percent)d%%')
     if color: rows1,cols1,colors1 = color_to_coords(img1)
     else: rows1,cols1,colors1 = grayscale_to_coords(img1)
     if verbose: bar1.next()
@@ -75,7 +75,7 @@ def animate_pixels(imfile1,imfile2,outfile,color=False,verbose=False):
     total = 2*n+4*buffer
 
     # np.linspace creates evenly spaced position and color arrays for transition
-    if verbose: bar2 = IncrementalBar("Interpolating",max=4,suffix='%(percent)d%%')
+    if verbose: bar2 = IncrementalBar("Interpolating\t",max=4,suffix='%(percent)d%%')
     colors = np.linspace(colors1,colors2,n)
     if verbose: bar2.next()
     rows = np.linspace(rows1+.5,rows2+.5,n)
@@ -125,7 +125,7 @@ def animate_pixels(imfile1,imfile2,outfile,color=False,verbose=False):
             else: points.set_array(colors[i])
         if verbose: bar3.next()
 
-    if verbose: bar3 = IncrementalBar("Rendering",max=total,suffix='%(percent)d%%')
+    if verbose: bar3 = IncrementalBar("Rendering\t\t",max=total,suffix='%(percent)d%%')
 
     # Create FuncAnimation with 60-millisecond inteval between frames
     ani = animation.FuncAnimation(fig,update,frames=total,interval=60)

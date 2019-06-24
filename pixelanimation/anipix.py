@@ -8,9 +8,9 @@ $ python anipix.py [imfile1] [imfile2] [outfile] [--color]
 
 Examples:
 
-    $ python anipix.py camera.png lena.png mixing.mp4
+    $ python anipix.py cameraman.png lena.png gray.mp4
 
-    $ python anipix.py im1.jpg im2.jpg mixing2.mp4 --c
+    $ python anipix.py peppers.png mandrill.png color.mp4 --c
 """
 
 
