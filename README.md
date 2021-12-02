@@ -1,2 +1,2 @@
 # eigenfun
-fun with eigenvalues
+fun with eigenvalues, and polynomial roots
