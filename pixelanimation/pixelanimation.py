@@ -89,7 +89,9 @@ def animate_pixels(imfile1,imfile2,outfile,color=False,verbose=False):
     if verbose: bar2 = IncrementalBar("Interpolating\t",max=4,suffix='%(percent)d%%')
     t = np.linspace(0,1,n)
     cos = -0.5*(np.cos(np.pi*t)-1)[:,np.newaxis]
+    if color: cos = cos[:,:,np.newaxis]
     colors = (1-cos)*colors1[np.newaxis] + cos*colors2[np.newaxis]
+    if color: cos = cos[:,:,0]
     if verbose: bar2.next()
     rows = (1-cos)*(rows1+.5)[np.newaxis] + cos*(rows2+.5)[np.newaxis]
     if verbose: bar2.next()
@@ -103,8 +105,8 @@ def animate_pixels(imfile1,imfile2,outfile,color=False,verbose=False):
     aspect_ratio2 = img2.shape[0]/img2.shape[1]
 
     plt.ioff()
-    # Figure will always have default matplotlib 6.4 inch width
-    fig = plt.figure(figsize=(6.4,max(aspect_ratio1,aspect_ratio2)*6.4),dpi=72)
+    inches = 5
+    fig = plt.figure(figsize=(inches,max(aspect_ratio1,aspect_ratio2)*inches),dpi=72)
     ax = fig.add_subplot(111)
     ax.set_aspect("equal")
     plt.subplots_adjust(top = 0.95, bottom = 0.05, right = 0.95, left = 0.05,
@@ -117,7 +119,7 @@ def animate_pixels(imfile1,imfile2,outfile,color=False,verbose=False):
     # Markers are measured in points, which are 1/72nd of an inch. Calculates
     # pixel size in points
     pixels = max(img1.shape[1],img2.shape[1])
-    pixels_per_inch = pixels/6.4
+    pixels_per_inch = pixels/inches
     size = 72/pixels_per_inch
 
     # core object is a scatter plot with square markers set to pixel size
