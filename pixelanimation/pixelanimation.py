@@ -75,12 +75,25 @@ def animate_pixels(imfile1,imfile2,outfile,color=False,verbose=False):
     total = 2*n+4*buffer
 
     # np.linspace creates evenly spaced position and color arrays for transition
+    # if verbose: bar2 = IncrementalBar("Interpolating\t",max=4,suffix='%(percent)d%%')
+    # colors = np.linspace(colors1,colors2,n)
+    # if verbose: bar2.next()
+    # rows = np.linspace(rows1+.5,rows2+.5,n)
+    # if verbose: bar2.next()
+    # cols = np.linspace(cols1+.5,cols2+.5,n)
+    # if verbose: bar2.next()
+    # pos = np.dstack((rows,cols))
+    # if verbose: bar2.next(); bar2.finish()
+
+    # testing consine transition
     if verbose: bar2 = IncrementalBar("Interpolating\t",max=4,suffix='%(percent)d%%')
-    colors = np.linspace(colors1,colors2,n)
+    t = np.linspace(0,1,n)
+    cos = -0.5*(np.cos(np.pi*t)-1)[:,np.newaxis]
+    colors = (1-cos)*colors1[np.newaxis] + cos*colors2[np.newaxis]
     if verbose: bar2.next()
-    rows = np.linspace(rows1+.5,rows2+.5,n)
+    rows = (1-cos)*(rows1+.5)[np.newaxis] + cos*(rows2+.5)[np.newaxis]
     if verbose: bar2.next()
-    cols = np.linspace(cols1+.5,cols2+.5,n)
+    cols = (1-cos)*(cols1+.5)[np.newaxis] + cos*(cols2+.5)[np.newaxis]
     if verbose: bar2.next()
     pos = np.dstack((rows,cols))
     if verbose: bar2.next(); bar2.finish()
@@ -91,9 +104,12 @@ def animate_pixels(imfile1,imfile2,outfile,color=False,verbose=False):
 
     plt.ioff()
     # Figure will always have default matplotlib 6.4 inch width
-    fig = plt.figure(figsize=(6.4,max(aspect_ratio1,aspect_ratio2)*6.4))
+    fig = plt.figure(figsize=(6.4,max(aspect_ratio1,aspect_ratio2)*6.4),dpi=72)
     ax = fig.add_subplot(111)
     ax.set_aspect("equal")
+    plt.subplots_adjust(top = 0.95, bottom = 0.05, right = 0.95, left = 0.05,
+            hspace = 0, wspace = 0)
+    plt.margins(0)
     plt.axis("off")
     plt.xlim((0,max(img1.shape[1],img2.shape[1])))
     plt.ylim((0,max(img1.shape[0],img2.shape[0])))
@@ -106,9 +122,11 @@ def animate_pixels(imfile1,imfile2,outfile,color=False,verbose=False):
 
     # core object is a scatter plot with square markers set to pixel size
     if color:
-        points = ax.scatter(rows[0],cols[0],c=colors1,marker='s',s=size**2)
+        points = ax.scatter(rows[0],cols[0],c=colors1,marker='s',s=size**2,linewidths=0)
     else:
-        points = ax.scatter(rows[0],cols[0],c=colors1,cmap="gray",marker='s',s=size**2,vmin=0,vmax=1)
+        points = ax.scatter(rows[0],cols[0],c=colors1,cmap="gray",marker='s',s=size**2,vmin=0,vmax=1,linewidths=0)
+    # plt.savefig('pixeltest.jpg')
+    # return 0
 
     # update function changes the scatter plot at each frame
     # set_color works for rgb, set_array works for grayscale
